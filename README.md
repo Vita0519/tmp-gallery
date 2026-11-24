@@ -1,30 +1,22 @@
 # Gallery
 
-作品卡片墙，push 到 `main` 后 GitHub Actions 自动构建并发布到 GitHub Pages：
-<https://vita0519.github.io/tmp-gallery/>
+[临时预览站](https://pre.allfather.top/portal) 门户公开项目的卡片墙，发布在 <https://vita0519.github.io/tmp-gallery/>。
 
-`works/` 下每个 `NN-name` 文件夹是一个作品，构建到 `dist/NN/`（编号去掉前导零）。构建产物不提交。
-
-## 添加作品
-
-1. 新建 `works/NN-name/`。
-   - **静态作品**：直接放 `index.html` 和资源，原样复制。
-   - **Vite 项目**：带 `package.json`，自动 `npm ci` + `vite build --base ./`。不要留嵌套的 `.git`。
-2. 可选：放 `cover.jpg`（或 `.png` / `.webp`，Vite 项目放 `public/`）作为卡片封面，建议 4:3。
-3. 可选：`meta.json` 写标题、简介、标签：
-   ```json
-   { "title": "Hello", "desc": "一句话简介", "tags": ["webgl"] }
-   ```
-
-每个作品页面左下角会自动加一个「← 画廊」返回链接。
+- **数据**：构建时读取门户 `rss.xml`，卡片直接跳转 `/v/<slug>`，不存源码。
+- **同步**：push 到 `main` 时构建，另外每小时定时跑一次；门户里过期的项目自动下架。
+- **封面**：Playwright 截项目首屏，缓存在 `covers/`（Actions cache），只给新项目截图，下架项目的封面一并清掉。
 
 ## 本地预览
 
 ```bash
-node scripts/build.mjs
+npm install
+npx playwright install chromium
+npm run build          # SKIP_SHOTS=1 可跳过截图
 npx serve dist
 ```
 
-## 首次启用 Pages
+换门户地址：`PORTAL_SITE=https://example.com npm run build`。
 
-仓库 Settings → Pages → Source 选 **GitHub Actions**。
+## 重新截某个封面
+
+本地删 `covers/<slug>.jpg`；线上到仓库 Actions → Caches 删掉缓存后重跑。
