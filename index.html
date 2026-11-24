@@ -32,10 +32,30 @@
 </style>
 </head>
 <body>
-<header><h1>Gallery</h1><small><!--COUNT--> works</small></header>
+<header><h1>Gallery</h1><small><span id="count"><!--COUNT--></span> works</small></header>
 <main>
 <!--TILES-->
 </main>
 <footer>数据来自 <a href="<!--SITE-->/portal">临时预览站门户</a> · 项目到期后自动下架 · 更新于 <!--UPDATED--> · <a href="https://github.com/Vita0519/tmp-gallery">github</a></footer>
+<script>
+// 构建最多每小时一次：到期的卡片在浏览器里按本地时间直接隐藏，不等下次构建
+(function () {
+  var tiles = [].slice.call(document.querySelectorAll('.tile[data-exp]'));
+  function sweep() {
+    var now = Date.now(), n = 0;
+    tiles.forEach(function (t) {
+      var exp = +t.dataset.exp;
+      var dead = exp > 0 && exp <= now;
+      t.hidden = dead;
+      if (!dead) n++;
+    });
+    document.getElementById('count').textContent = n;
+    var main = document.querySelector('main');
+    if (!n && tiles.length && !main.querySelector('.empty')) main.insertAdjacentHTML('beforeend', '<p class="empty">门户暂时没有公开项目。</p>');
+  }
+  sweep();
+  setInterval(sweep, 30000);
+})();
+</script>
 </body>
 </html>
