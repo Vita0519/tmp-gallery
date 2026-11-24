@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>01 Hello</title>
+<style>html,body{margin:0;height:100%;background:#0b0d10;overflow:hidden}canvas{display:block}</style></head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');
+const fit=()=>{c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio};fit();addEventListener('resize',fit);
+(function f(t){t/=1000;x.fillStyle='rgba(11,13,16,.08)';x.fillRect(0,0,c.width,c.height);
+for(let i=0;i<60;i++){const a=i/60*Math.PI*2+t*.4,r=Math.min(c.width,c.height)*(.18+.12*Math.sin(t+i*.3));
+x.fillStyle=`hsl(${170+i*2},80%,60%)`;x.beginPath();x.arc(c.width/2+Math.cos(a)*r,c.height/2+Math.sin(a*2)*r*.6,3*devicePixelRatio,0,7);x.fill()}
+requestAnimationFrame(f)})(0);
+</script>
+</body>
+</html>
