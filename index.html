@@ -5,56 +5,138 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Gallery · Vita</title>
 <style>
-  :root{--bg:#0b0d10;--surface:#14171d;--surface-2:#1a1e25;--ink:#e8eaf0;--ink-2:#a1a5aa;--ink-3:#757a7e;--line:rgba(255,255,255,.07);--brand:#2dd4bf;--ease:cubic-bezier(.2,.8,.2,1)}
-  @media (prefers-color-scheme:light){:root{--bg:#f6f7f5;--surface:#fff;--surface-2:#eef0ec;--ink:#16181b;--ink-2:#4e5458;--ink-3:#80868a;--line:rgba(0,0,0,.08);--brand:#0f766e}}
+  :root{--bg:#0b0d10;--surface:#14171d;--surface-2:#1a1e25;--ink:#e8eaf0;--ink-2:#a1a5aa;--ink-3:#757a7e;--line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.14);--brand:#2dd4bf;--ease:cubic-bezier(.2,.8,.2,1)}
+  @media (prefers-color-scheme:light){:root{--bg:#f6f7f5;--surface:#fff;--surface-2:#eef0ec;--ink:#16181b;--ink-2:#4e5458;--ink-3:#80868a;--line:rgba(0,0,0,.08);--line-2:rgba(0,0,0,.16);--brand:#0f766e}}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif}
-  header{max-width:1280px;margin:0 auto;padding:64px 24px 28px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+  a{color:inherit}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+  header{padding:56px 0 24px}
+  .top{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
   h1{margin:0;font-size:clamp(32px,6vw,64px);letter-spacing:-.03em;font-weight:700}
-  header small{color:var(--ink-3);font-variant-numeric:tabular-nums}
-  main{max-width:1280px;margin:0 auto;padding:0 24px 64px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+  .top small{color:var(--ink-3);font-variant-numeric:tabular-nums}
+  .info{margin:14px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--ink-2);font-size:13px}
+  .info a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink-2);transition:color .2s}
+  .info a:hover{color:var(--brand)}
+  .info svg{width:14px;height:14px;fill:currentColor}
+  .info .muted{color:var(--ink-3)}
+  .bar{position:sticky;top:0;z-index:5;padding:12px 0;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .search{position:relative;max-width:520px}
+  .search svg{position:absolute;left:14px;top:50%;width:16px;height:16px;transform:translateY(-50%);fill:var(--ink-3);pointer-events:none}
+  .search input{width:100%;height:42px;padding:0 64px 0 40px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font:inherit;outline:none;transition:border-color .2s,box-shadow .2s}
+  .search input:focus{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 22%,transparent)}
+  .search kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font:12px/1 ui-monospace,Consolas,monospace;color:var(--ink-3);border:1px solid var(--line-2);border-radius:6px;padding:4px 7px}
+  main{padding:8px 0 64px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
   .tile{position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--surface) center/cover no-repeat;border:1px solid var(--line);color:var(--ink);text-decoration:none;display:flex;flex-direction:column;justify-content:space-between;padding:16px;transition:transform .35s var(--ease),border-color .35s var(--ease)}
   .tile:not(.has-cover){background-image:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--brand) 22%,transparent),transparent 60%)}
-  .tile.has-cover::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72),transparent 55%);transition:opacity .35s var(--ease)}
+  .tile.has-cover::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.78),transparent 58%);transition:opacity .35s var(--ease)}
   .tile.has-cover{color:#fff}
   .tile>*{position:relative}
   .tile:hover{transform:translateY(-3px);border-color:var(--brand)}
-  .tile.has-cover:hover::before{opacity:.55}
+  .tile.has-cover:hover::before{opacity:.6}
   .num{font:600 13px/1 ui-monospace,Consolas,monospace;opacity:.7}
   .meta{display:flex;flex-direction:column;gap:4px}
   .meta b{font-size:20px;letter-spacing:-.01em}
-  .meta em{font-style:normal;font-size:13px;opacity:.75;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta em{font-style:normal;font-size:13px;opacity:.78;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .meta i{font-style:normal;display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-  .meta i span{font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(127,127,127,.22)}
+  .meta i span{font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(127,127,127,.28)}
+  mark{background:color-mix(in srgb,var(--brand) 45%,transparent);color:inherit;border-radius:3px}
   .empty{grid-column:1/-1;color:var(--ink-3);padding:48px 0;text-align:center}
-  footer{max-width:1280px;margin:0 auto;padding:0 24px 40px;color:var(--ink-3);font-size:13px}
-  footer a{color:var(--ink-2)}
+  footer{padding:0 0 40px;color:var(--ink-3);font-size:13px}
 </style>
 </head>
 <body>
-<header><h1>Gallery</h1><small><span id="count"><!--COUNT--></span> works</small></header>
-<main>
+<div class="wrap">
+<header>
+  <div class="top"><h1>Gallery</h1><small><span id="count"><!--COUNT--></span> works</small></div>
+  <div class="info">
+    <a href="<!--SITE-->/portal" target="_blank" rel="noopener" title="数据来源">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v4H4zm0 6h7v10H4zm9 0h7v4h-7zm0 6h7v4h-7z"/></svg>数据来源：临时预览站 · <!--HOST-->
+    </a>
+    <a href="<!--SITE-->/rss.xml" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M5 17a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 10a11 11 0 0 1 11 11h-3a8 8 0 0 0-8-8zm0-7a18 18 0 0 1 18 18h-3A15 15 0 0 0 3 6z"/></svg>RSS
+    </a>
+    <a href="https://github.com/Vita0519" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>作者 Vita0519
+    </a>
+    <a href="https://github.com/Vita0519/tmp-gallery" target="_blank" rel="noopener">本站源码</a>
+    <span class="muted">每小时同步 · 到期自动下架 · 更新于 <!--UPDATED--></span>
+  </div>
+</header>
+<div class="bar">
+  <label class="search">
+    <svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.4-1.41 1.4-5.4-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+    <input id="q" type="search" placeholder="模糊搜索标题、简介、标签…" autocomplete="off" aria-label="搜索项目">
+    <kbd>/</kbd>
+  </label>
+</div>
+<main id="grid">
 <!--TILES-->
+<p class="empty" id="empty" hidden></p>
 </main>
-<footer>数据来自 <a href="<!--SITE-->/portal">临时预览站门户</a> · 项目到期后自动下架 · 更新于 <!--UPDATED--> · <a href="https://github.com/Vita0519/tmp-gallery">github</a></footer>
+<footer>Gallery · 卡片跳转至临时预览站，项目归原作者所有</footer>
+</div>
 <script>
-// 构建最多每小时一次：到期的卡片在浏览器里按本地时间直接隐藏，不等下次构建
 (function () {
-  var tiles = [].slice.call(document.querySelectorAll('.tile[data-exp]'));
-  function sweep() {
-    var now = Date.now(), n = 0;
-    tiles.forEach(function (t) {
-      var exp = +t.dataset.exp;
-      var dead = exp > 0 && exp <= now;
-      t.hidden = dead;
-      if (!dead) n++;
-    });
-    document.getElementById('count').textContent = n;
-    var main = document.querySelector('main');
-    if (!n && tiles.length && !main.querySelector('.empty')) main.insertAdjacentHTML('beforeend', '<p class="empty">门户暂时没有公开项目。</p>');
+  var tiles = [].slice.call(document.querySelectorAll('.tile'));
+  var q = document.getElementById('q'), empty = document.getElementById('empty'), count = document.getElementById('count');
+  // 缓存原始文本，高亮时从原文重建，避免 innerHTML 注入
+  tiles.forEach(function (t) {
+    t._b = t.querySelector('.meta b'); t._e = t.querySelector('.meta em');
+    t._bt = t._b ? t._b.textContent : ''; t._et = t._e ? t._e.textContent : '';
+    t._s = (t.dataset.s || '').toLowerCase();
+  });
+  // 模糊匹配：每个关键词要么是子串，要么按顺序作为子序列出现（如 "pch" 命中 "play chess"）
+  function hit(hay, w) {
+    if (hay.indexOf(w) >= 0) return 2;
+    var i = 0;
+    for (var k = 0; k < hay.length && i < w.length; k++) if (hay[k] === w[i]) i++;
+    return i === w.length ? 1 : 0;
   }
-  sweep();
-  setInterval(sweep, 30000);
+  function mark(el, text, words) {
+    if (!el) return;
+    el.textContent = '';
+    var lower = text.toLowerCase(), ranges = [];
+    words.forEach(function (w) {
+      var p = 0, at;
+      while ((at = lower.indexOf(w, p)) >= 0) { ranges.push([at, at + w.length]); p = at + w.length; }
+    });
+    ranges.sort(function (a, b) { return a[0] - b[0]; });
+    var pos = 0;
+    ranges.forEach(function (r) {
+      if (r[0] < pos) return;
+      el.appendChild(document.createTextNode(text.slice(pos, r[0])));
+      var m = document.createElement('mark'); m.textContent = text.slice(r[0], r[1]); el.appendChild(m);
+      pos = r[1];
+    });
+    el.appendChild(document.createTextNode(text.slice(pos)));
+  }
+  function render() {
+    var now = Date.now(), words = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean), n = 0, alive = 0;
+    tiles.forEach(function (t) {
+      var exp = +t.dataset.exp, dead = exp > 0 && exp <= now;
+      if (!dead) alive++;
+      var ok = !dead && words.every(function (w) { return hit(t._s, w); });
+      t.hidden = !ok;
+      if (ok) n++;
+      mark(t._b, t._bt, words); mark(t._e, t._et, words);
+    });
+    count.textContent = words.length ? n + ' / ' + alive : alive;
+    empty.hidden = n > 0;
+    empty.textContent = words.length ? '没有匹配「' + q.value.trim() + '」的项目' : '门户暂时没有公开项目。';
+    var url = new URL(location.href);
+    if (words.length) url.searchParams.set('q', q.value.trim()); else url.searchParams.delete('q');
+    history.replaceState(null, '', url);
+  }
+  var timer;
+  q.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 80); });
+  q.addEventListener('keydown', function (e) { if (e.key === 'Escape') { q.value = ''; render(); q.blur(); } });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); }
+  });
+  q.value = new URLSearchParams(location.search).get('q') || '';
+  render();
+  setInterval(render, 30000); // 到期卡片实时下架
 })();
 </script>
 </body>
